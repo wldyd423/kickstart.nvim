@@ -241,6 +241,7 @@ require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
   'mcchrish/nnn.vim',
+  'folke/neoconf.nvim',
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
   -- keys can be used to configure plugin behavior/loading/etc.
@@ -663,7 +664,9 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        clangd = {},
+        clangd = {
+          cmd = {"clangd", "--header-insertion=iwyu"},
+        },
         -- gopls = {},
         pyright = {},
         -- rust_analyzer = {},
@@ -710,6 +713,8 @@ require('lazy').setup({
         'stylua', -- Used to format Lua code
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
+
+      require('neoconf').setup({})
 
       require('mason-lspconfig').setup {
         ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
@@ -1010,3 +1015,6 @@ require('lazy').setup({
 vim.o.tabstop = 4
 vim.o.shiftwidth = 4
 vim.o.expandtab = true
+
+vim.api.nvim_set_keymap('n', "<C-d>", "<C-d>zz",{ noremap=true, silent=true})
+vim.api.nvim_set_keymap('n', "<C-u>", "<C-u>zz", { noremap=true, silent=true})
