@@ -236,6 +236,9 @@ vim.opt.rtp:prepend(lazypath)
 --  To update plugins you can run
 --    :Lazy update
 --
+
+require 'custom.dumbcustom'
+
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
@@ -665,7 +668,7 @@ require('lazy').setup({
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         clangd = {
-          cmd = {"clangd", "--header-insertion=iwyu"},
+          cmd = { 'clangd', '--header-insertion=iwyu' },
         },
         -- gopls = {},
         pyright = {},
@@ -721,7 +724,7 @@ require('lazy').setup({
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
-      require('neoconf').setup({})
+      require('neoconf').setup {}
 
       require('mason-lspconfig').setup {
         ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
@@ -1023,5 +1026,5 @@ vim.o.tabstop = 4
 vim.o.shiftwidth = 4
 vim.o.expandtab = true
 
-vim.api.nvim_set_keymap('n', "<C-d>", "<C-d>zz",{ noremap=true, silent=true})
-vim.api.nvim_set_keymap('n', "<C-u>", "<C-u>zz", { noremap=true, silent=true})
+vim.api.nvim_set_keymap('n', '<C-d>', '<C-d>zz', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<C-u>', '<C-u>zz', { noremap = true, silent = true })
