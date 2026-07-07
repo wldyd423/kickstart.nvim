@@ -4,7 +4,11 @@
 
 local gh = require('config.pack').gh
 
-vim.pack.add { gh 'ThePrimeagen/99' }
+vim.pack.add {
+  -- blink.compat bridges 99's nvim-cmp style completion source into blink.cmp
+  { src = gh 'saghen/blink.compat', version = vim.version.range '2.*' },
+  gh 'ThePrimeagen/99',
+}
 
 local _99 = require '99'
 

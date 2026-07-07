@@ -1,8 +1,12 @@
 -- [[ Debugging ]]
--- nvim-dap with dap-ui, delve (Go) and codelldb (C/C++).
--- Loaded after plugins/lsp.lua, which sets up mason.
+-- nvim-dap with dap-ui, codelldb (C/C++) and, when a Go toolchain is
+-- present, delve (Go). Loaded after plugins/lsp.lua, which sets up mason.
 
 local gh = require('config.pack').gh
+
+-- mason installs delve by compiling it with `go`, so only pull in the Go
+-- debugging pieces when the toolchain exists
+local have_go = vim.fn.executable 'go' == 1
 
 vim.pack.add {
   gh 'mfussenegger/nvim-dap',
@@ -10,8 +14,8 @@ vim.pack.add {
   gh 'nvim-neotest/nvim-nio', -- required dependency for nvim-dap-ui
   gh 'mason-org/mason.nvim',
   gh 'jay-babu/mason-nvim-dap.nvim', -- installs the debug adapters for you
-  gh 'leoluz/nvim-dap-go',
 }
+if have_go then vim.pack.add { gh 'leoluz/nvim-dap-go' } end
 
 local dap = require 'dap'
 local dapui = require 'dapui'
@@ -25,11 +29,11 @@ require('mason-nvim-dap').setup {
   -- see mason-nvim-dap README for more information
   handlers = {},
 
-  ensure_installed = {
+  ensure_installed = have_go and {
     -- Update this to ensure that you have the debuggers for the langs you want
     'delve',
     'codelldb',
-  },
+  } or { 'codelldb' },
 }
 
 -- Dap UI setup
@@ -57,13 +61,15 @@ dap.listeners.before.event_terminated['dapui_config'] = dapui.close
 dap.listeners.before.event_exited['dapui_config'] = dapui.close
 
 -- Install golang specific config
-require('dap-go').setup {
-  delve = {
-    -- On Windows delve must be run attached or it crashes.
-    -- See https://github.com/leoluz/nvim-dap-go/blob/main/README.md#configuring
-    detached = vim.fn.has 'win32' == 0,
-  },
-}
+if have_go then
+  require('dap-go').setup {
+    delve = {
+      -- On Windows delve must be run attached or it crashes.
+      -- See https://github.com/leoluz/nvim-dap-go/blob/main/README.md#configuring
+      detached = vim.fn.has 'win32' == 0,
+    },
+  }
+end
 
 -- C/C++ debugging via codelldb (installed through Mason)
 dap.adapters.codelldb = {
