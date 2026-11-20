@@ -66,3 +66,7 @@ function gh(repo) return 'https://github.com/' .. repo end
 
 require("plugins.guess_indent")
 require("plugins.gitsigns")
+require("plugins.tokyonight")
+require("plugins.telescope")
+require("plugins.lsp")
+require("plugins.treesitter")

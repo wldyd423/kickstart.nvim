@@ -49,3 +49,8 @@ gitsigns.setup {
         vim.keymap.set({ 'o', 'x' }, 'ih', gitsigns.select_hunk, { desc = 'text object [i]nside [h]unk', buf = bufnr })
     end,
 }
+
+--vim.api.nvim_set_hl(0, 'GitSignsCurrentLineBlame', {
+--    fg = '#808080',
+--    italic = true,
+--})
